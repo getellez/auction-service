@@ -1,5 +1,5 @@
 service: auction-service
-
+frameworkVersion: ^3.23.0
 plugins:
   - serverless-bundle
   - serverless-pseudo-parameters
@@ -10,11 +10,33 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
-  
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
+  iamRoleStatements:
+    - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+
 functions:
-  hello:
-    handler: src/handlers/hello.handler
+  createAuction:
+    handler: src/handlers/createAuction.handler
+    events:
+      - http:
+          method: POST
+          path: /auction
+  getAuctions:
+    handler: src/handlers/getAuctions.handler
     events:
       - http:
           method: GET
-          path: /hello
+          path: /auctions
+
+resources:
+  Resources:
+    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
+
+custom:
+  AuctionsTable:
+    name: !Ref AuctionsTable
+    arn: !GetAtt AuctionsTable.Arn
+  bundle:
+    linting: false
+
