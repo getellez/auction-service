@@ -1,9 +1,9 @@
 import {v4 as uuid} from 'uuid';
 import AWS from 'aws-sdk';
 import createError from 'http-errors'
-import commonMiddleware from '../lib/commonMiddleware'
 import validator from '@middy/validator';
-import createAuctionSchema from '../lib/createAuctionSchema'
+import commonMiddleware from '../lib/commonMiddleware'
+import createAuctionSchema from '../lib/schemas/createAuctionSchema'
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
