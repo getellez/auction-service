@@ -8,3 +8,5 @@ jspm_packages
 
 # Webpack directories
 .webpack
+
+auth0.example.txt
